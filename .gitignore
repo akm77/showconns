@@ -1,0 +1,9 @@
+dist/
+vendor/
+/.vscode/
+.gh_token
+*.min.*
+.code-workspace.code-workspace
+.git-credentials
+.git_token
+.gh_token
