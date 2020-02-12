@@ -3,7 +3,7 @@ vendor/
 /.vscode/
 .gh_token
 *.min.*
-.code-workspace.code-workspace
+.vscode.code-workspace
 .git-credentials
 .git_token
 .gh_token
