@@ -40,47 +40,57 @@ function plugin_showconns_install() {
 // Define search option for types of the plugins
 function plugin_showconns_getAddSearchOptions($itemtype) {
    $sopt = [];
-   if ($itemtype != 'Computer') {
-      return $sopt;
-   }
 
+   Toolbox::logInFile('itemtype', "itemtype - " . $itemtype . "\n");
    $plugin = new Plugin();
 
-   if ($plugin->isInstalled('ldapcomputers')
-       && $plugin->isActivated('ldapcomputers')
-       && Session::haveRight("plugin_ldapcomputers_view", READ)) {
-        $sopt[3210]['table']         = 'glpi_plugin_ldapcomputers_computers';
-        $sopt[3210]['field']         = 'name';
-        $sopt[3210]['linkfield']     = '';
-        $sopt[3210]['name']          = "LDAP " . __("Name");
-        $sopt[3210]['joinparams']  = ['jointype' => 'child'];
-        $sopt[3210]['forcegroupby']  = true;
+   if ($plugin->isInstalled('showconns')
+       && $plugin->isActivated('showconns')) {
 
-        $sopt[3211]['table']         = 'glpi_plugin_ldapcomputers_computers';
-        $sopt[3211]['field']         = 'lastLogon';
-        $sopt[3211]['linkfield']     = '';
-        $sopt[3211]['name']          = "LDAP " . __('Last logon', 'ldapcomputers');
-        $sopt[3211]['joinparams']  = ['jointype' => 'child'];
-        $sopt[3211]['forcegroupby']  = true;
-        $sopt[3211]['datatype']      = 'datetime';
+      $items_device_joinparams    = ['jointype'          => 'itemtype_item',
+                                    'specific_itemtype' => $itemtype];
 
-        $sopt[3212]['table']         = 'glpi_plugin_ldapcomputers_computers';
-        $sopt[3212]['field']         = 'distinguishedName';
-        $sopt[3212]['linkfield']     = '';
-        $sopt[3212]['name']          = "LDAP " . __('Distinguished name', 'ldapcomputers');
-        $sopt[3212]['joinparams']  = ['jointype' => 'child'];
-        $sopt[3212]['forcegroupby']  = true;
+      switch ($itemtype) {
+         case 'Peripheral' :
+         case 'Phone'      :
+         case 'Monitor'    :
+         case 'Printer'    :
+            $sopt[3311]['table']        = 'glpi_computers';
+            $sopt[3311]['field']        = 'name';
+            $sopt[3311]['name']         =  'Conns - ' . __('Computer');
+            $sopt[3311]['datatype']     = 'itemlink';
+            $sopt[3311]['forcegroupby'] = true;
+            $sopt[3311]['joinparams']   = [
+                           'beforejoin'    => [
+                              'table'      => 'glpi_computers_items',
+                              'joinparams' => $items_device_joinparams
+                           ]
+                       ];
+            break;
+         case 'Computer' :
+            $sopt[3311]['table']        = 'glpi_printers';
+            $sopt[3311]['field']        = 'name';
+            $sopt[3311]['field']        = `computers_id`;
+            $sopt[3311]['name']         =  'Conns - ' . __('Printer');
+            $sopt[3311]['datatype']     = 'itemlink';
+            //$sopt[3311]['forcegroupby'] = true;
+            //$sopt[3311]['usehaving']    = true;
+            $sopt[3311]['joinparams']   = [
+                           'beforejoin'    => [
+                              'table'      => 'glpi_computers_items',
+                              'joinparams' => [
+                                 'jointype'           => 'item_item',
+                                 'specific_itemtype'  => 'Printer'
+                              ]
+                           ]
+                       ];
+            break;
+      }
 
-        $sopt[3213]['table']         = 'glpi_plugin_ldapcomputers_computers';
-        $sopt[3213]['field']         = 'operatingSystem';
-        $sopt[3213]['linkfield']     = '';
-        $sopt[3213]['name']          = "LDAP " . __('OS', 'ldapcomputers');
-        $sopt[3213]['joinparams']  = ['jointype' => 'child'];
-        $sopt[3213]['forcegroupby']  = true;
    }
    return $sopt;
 }
-
+/*
 function plugin_ldapcomputers_addLeftJoin($type, $ref_table, $new_table, $linkfield, &$already_link_tables) {
    $out = "";
    switch ($new_table) {
@@ -92,6 +102,7 @@ function plugin_ldapcomputers_addLeftJoin($type, $ref_table, $new_table, $linkfi
 
    return $out;
 }
+*/
 
 
 /**
@@ -99,7 +110,7 @@ function plugin_ldapcomputers_addLeftJoin($type, $ref_table, $new_table, $linkfi
  *
  * @return boolean
  */
-function plugin_ldapcomputers_uninstall() {
+function plugin_showconns_uninstall() {
 
    return true;
 }
