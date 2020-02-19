@@ -22,7 +22,7 @@
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with Show connected items - plugin for GLPI. 
+ along with Show connected items - plugin for GLPI.
  If not, see <http://www.gnu.org/licenses/>.
 
 ------------------------------------------------------------------------
@@ -40,7 +40,7 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_SHOWCONNS_VERSION', '0.4');
+define('PLUGIN_SHOWCONNS_VERSION', '0.1');
 // Minimal GLPI version, inclusive
 define('PLUGIN_SHOWCONNS_MIN_GLPI', '9.2');
 // Maximum GLPI version, exclusive
