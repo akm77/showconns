@@ -40,7 +40,7 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_SHOWCONNS_VERSION', '0.1');
+define('PLUGIN_SHOWCONNS_VERSION', '0.2');
 // Minimal GLPI version, inclusive
 define('PLUGIN_SHOWCONNS_MIN_GLPI', '9.2');
 // Maximum GLPI version, exclusive
