@@ -38,7 +38,7 @@ function plugin_showconns_install() {
 ////// SEARCH FUNCTIONS ///////(){
 
 // Define search option for types of the plugins
-function plugin_showconns_getAddSearchOptions($itemtype) {
+function plugin_showconns_getAddSearchOptionsNew($itemtype) {
    $sopt = [];
 
    Toolbox::logInFile('itemtype', "itemtype - " . $itemtype . "\n");
@@ -47,7 +47,7 @@ function plugin_showconns_getAddSearchOptions($itemtype) {
    if ($plugin->isInstalled('showconns')
        && $plugin->isActivated('showconns')) {
 
-      $items_device_joinparams    = ['jointype'          => 'itemtype_item',
+      $items_device_joinparams    = ['jointype'         => 'itemtype_item',
                                     'specific_itemtype' => $itemtype];
 
       switch ($itemtype) {
@@ -55,39 +55,259 @@ function plugin_showconns_getAddSearchOptions($itemtype) {
          case 'Phone'      :
          case 'Monitor'    :
          case 'Printer'    :
-            $sopt[3311]['table']        = 'glpi_computers';
-            $sopt[3311]['field']        = 'name';
-            $sopt[3311]['name']         =  'Conns - ' . __('Computer');
-            $sopt[3311]['datatype']     = 'itemlink';
-            $sopt[3311]['forcegroupby'] = true;
-            $sopt[3311]['joinparams']   = [
-                           'beforejoin'    => [
-                              'table'      => 'glpi_computers_items',
-                              'joinparams' => $items_device_joinparams
-                           ]
-                       ];
+            $sopt[] = [
+               'id' => 3311,
+               'table'        => 'glpi_computers',
+               'field'        => 'name',
+               'name'         =>  'Conns - ' . __('Computer'),
+               'datatype'     => 'itemlink',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin'    => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => $items_device_joinparams
+                                    ]
+                                 ]
+               ];
             break;
          case 'Computer' :
-            $sopt[3311]['table']        = 'glpi_printers';
-            $sopt[3311]['field']        = 'name';
-            $sopt[3311]['field']        = `computers_id`;
-            $sopt[3311]['name']         =  'Conns - ' . __('Printer');
-            $sopt[3311]['datatype']     = 'itemlink';
-            //$sopt[3311]['forcegroupby'] = true;
-            //$sopt[3311]['usehaving']    = true;
-            $sopt[3311]['joinparams']   = [
-                           'beforejoin'    => [
-                              'table'      => 'glpi_computers_items',
-                              'joinparams' => [
-                                 'jointype'           => 'item_item',
-                                 'specific_itemtype'  => 'Printer'
+            $sopt[] = [
+               'id' => 3312,
+               'table'        => 'glpi_printers',
+               'field'        => 'name',
+               'name'         =>  'Conns - ' . __('Printer'),
+               'datatype'     => 'itemlink',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Printer'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+            $sopt[] = [
+               'id' => 3313,
+               'table'        => 'glpi_printers',
+               'field'        => 'serial',
+               'name'         =>  'Conns - ' . __('Printer') .' - ' . __('Serial number'),
+               'datatype'     => 'text',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Printer'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+            $sopt[] = [
+               'id' => 3314,
+               'table'        => 'glpi_printers',
+               'field'        => 'otherserial',
+               'name'         =>  'Conns - ' . __('Printer') .' - ' . __('Inventory number'),
+               'datatype'     => 'text',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Printer'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+
+            $sopt[] = [
+               'id' => 3315,
+               'table'        => 'glpi_monitors',
+               'field'        => 'name',
+               'name'         =>  'Conns - ' . __('Monitor'),
+               'datatype'     => 'itemlink',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Monitor'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+            $sopt[] = [
+               'id' => 3316,
+               'table'        => 'glpi_monitors',
+               'field'        => 'serial',
+               'name'         =>  'Conns - ' . __('Monitor') .' - ' . __('Serial number'),
+               'datatype'     => 'text',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Monitor'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+            $sopt[] = [
+               'id' => 3317,
+               'table'        => 'glpi_monitors',
+               'field'        => 'otherserial',
+               'name'         =>  'Conns - ' . __('Monitor') .' - ' . __('Inventory number'),
+               'datatype'     => 'text',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Monitor'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+
+            $sopt[] = [
+               'id' => 3318,
+               'table'        => 'glpi_phones',
+               'field'        => 'name',
+               'name'         =>  'Conns - ' . __('Phone'),
+               'datatype'     => 'itemlink',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Phone'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+            $sopt[] = [
+               'id' => 3319,
+               'table'        => 'glpi_phones',
+               'field'        => 'serial',
+               'name'         =>  'Conns - ' . __('Phone') .' - ' . __('Serial number'),
+               'datatype'     => 'text',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Phone'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+            $sopt[] = [
+               'id' => 3320,
+               'table'        => 'glpi_phones',
+               'field'        => 'otherserial',
+               'name'         =>  'Conns - ' . __('Phone') .' - ' . __('Inventory number'),
+               'datatype'     => 'text',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Phone'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+
+            $sopt[] = [
+               'id' => 3321,
+            'table'        => 'glpi_peripherals',
+            'field'        => 'name',
+            'name'         =>  'Conns - ' . __('Peripheral'),
+            'datatype'     => 'itemlink',
+            'linkfield' => 'items_id',
+            'forcegroupby' => true,
+            'splititems'   => true,
+            'joinparams'   => [
+                                 'beforejoin' => [
+                                    'table'      => 'glpi_computers_items',
+                                    'joinparams' => [
+                                       'jointype' => 'child',
+                                       'condition' => "AND NEWTABLE.`itemtype` = 'Peripheral'",
+                                    ]
+                                 ]
                               ]
-                           ]
-                       ];
-            break;
+            ];
+            $sopt[] = [
+               'id' => 3322,
+               'table'        => 'glpi_peripherals',
+               'field'        => 'serial',
+               'name'         =>  'Conns - ' . __('Peripheral') .' - ' . __('Serial number'),
+               'datatype'     => 'text',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Peripheral'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+            $sopt[] = [
+               'id' => 3323,
+               'table'        => 'glpi_peripherals',
+               'field'        => 'otherserial',
+               'name'         =>  'Conns - ' . __('Peripheral') .' - ' . __('Inventory number'),
+               'datatype'     => 'text',
+               'linkfield' => 'items_id',
+               'forcegroupby' => true,
+               'splititems'   => true,
+               'joinparams'   => [
+                                    'beforejoin' => [
+                                       'table'      => 'glpi_computers_items',
+                                       'joinparams' => [
+                                          'jointype' => 'child',
+                                          'condition' => "AND NEWTABLE.`itemtype` = 'Peripheral'",
+                                       ]
+                                    ]
+                                 ]
+               ];
+         break;
       }
 
    }
+   Toolbox::logInFile('opts', "" . print_r($sopt, true));
    return $sopt;
 }
 /*
