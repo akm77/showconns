@@ -310,20 +310,6 @@ function plugin_showconns_getAddSearchOptionsNew($itemtype) {
    Toolbox::logInFile('opts', "" . print_r($sopt, true));
    return $sopt;
 }
-/*
-function plugin_ldapcomputers_addLeftJoin($type, $ref_table, $new_table, $linkfield, &$already_link_tables) {
-   $out = "";
-   switch ($new_table) {
-      case "glpi_plugin_ldapcomputers_computers": // From order list
-         $out = " LEFT JOIN `glpi_plugin_ldapcomputers_computers`
-                     ON `glpi_plugin_ldapcomputers_computers`.`name` = `glpi_computers`.`name` ";
-         break;
-   }
-
-   return $out;
-}
-*/
-
 
 /**
  * Plugin uninstall process
