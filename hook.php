@@ -41,7 +41,6 @@ function plugin_showconns_install() {
 function plugin_showconns_getAddSearchOptionsNew($itemtype) {
    $sopt = [];
 
-   Toolbox::logInFile('itemtype', "itemtype - " . $itemtype . "\n");
    $plugin = new Plugin();
 
    if ($plugin->isInstalled('showconns')
@@ -307,7 +306,6 @@ function plugin_showconns_getAddSearchOptionsNew($itemtype) {
       }
 
    }
-   Toolbox::logInFile('opts', "" . print_r($sopt, true));
    return $sopt;
 }
 
